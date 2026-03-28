@@ -211,5 +211,4 @@ public class PlayerFronteiraTest {
         player.usarItem(chave);
         assertThat(player.getInventario()).isEqualTo(inv);
     }
-    ///////////////////////
 }

@@ -104,5 +104,4 @@ public class PlayerDominioTest {
         player.usarItem(pocao);
         assertThat(player.getInventario().isEmpty()).isTrue();
     }
-    ///////////////////////
 }

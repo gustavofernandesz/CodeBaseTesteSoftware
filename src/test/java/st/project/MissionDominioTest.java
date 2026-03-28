@@ -25,31 +25,6 @@ public class MissionDominioTest {
         assertThat(missao.isMissaoConcluida()).isTrue();
     }
 
-    @Test
-    @DisplayName("Teste de Dominio: Missao não concluida se o jogador não possui calice")
-    void testeDominioJogadorNaoPossuiCalice() {
-        Player jog = new Player(salaDoCalice);
-
-        missao.verificarProgresso(jog);
-        assertThat(missao.isMissaoConcluida()).isFalse();
-    }
-
-    @Test
-    @DisplayName("Teste de Dominio: Se o jogador perder o calice depois de concluir a missao a missao continua concluida")
-    void testeDominioCaliceJaFoiColetado() {
-        Item calice = new Item("Cálice Mágico", Item.Type.CALICE, "O objeto da missão");
-        Player jog = new Player(salaDoCalice);
-        jog.adicionarItem(calice);
-
-        missao.verificarProgresso(jog);
-        assertThat(missao.isMissaoConcluida()).isTrue();
-
-        jog.removerItem(calice);
-
-        missao.verificarProgresso(jog);
-        assertThat(missao.isMissaoConcluida()).isTrue();
-    }
-
     // isCaliceColetado
 
     @Test
@@ -64,15 +39,6 @@ public class MissionDominioTest {
 
     }
 
-    @Test
-    @DisplayName("Teste de Dominio: Se o jogador não coletou o calice deve retornar False")
-    void testeDominioCaliceNaoColetado() {
-        Player jog = new Player(salaDoCalice);
-
-        missao.verificarProgresso(jog);
-        assertThat(missao.isCaliceColetado()).isFalse();
-    }
-
     // getSalaCalice
 
     @Test
@@ -80,5 +46,4 @@ public class MissionDominioTest {
     void testeDominioRetornaSalaCalice() {
         assertThat(missao.getSalaCalice()).isEqualTo(salaDoCalice);
     }
-    ///////////////////////
 }

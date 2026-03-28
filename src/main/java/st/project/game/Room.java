@@ -29,7 +29,9 @@ public class Room {
     public void setBloqueada(boolean bloqueada) { this.bloqueada = bloqueada; }
 
     public void adicionarItem(Item item) {
-        items.add(item);
+        if (item != null) {
+            items.add(item);
+        }
     }
 
     public Item removerItem(Item item) {

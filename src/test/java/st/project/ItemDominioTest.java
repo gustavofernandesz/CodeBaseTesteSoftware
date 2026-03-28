@@ -33,5 +33,4 @@ public class ItemDominioTest {
     void testeDominioToString() {
         assertThat(item.toString()).isEqualTo("Chave Encantada (Abre a sala do cálice)");
     }
-    ///////////////////////
 }

@@ -45,5 +45,4 @@ public class PlayerEstruturaTest {
         player.adicionarItem(pocao);
         assertThat(player.possuiItem(null)).isFalse();
     }
-    ///////////////////////
 }
