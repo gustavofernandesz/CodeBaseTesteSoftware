@@ -33,6 +33,7 @@ public class Player {
     }
 
     public void adicionarItem(Item item) {
+        if (item == null) return;
         inventario.add(item);
     }
 

@@ -5,15 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Room {
-    private final String descricao;
+    private final String nome;
     private final int x;
     private final int y;               // coordenadas no grid
     private final List<Item> items;       // itens presentes na sala
     private boolean bloqueada;      // se precisa de chave para entrar
     private final HashMap<String, Room> vizinhos;
 
-    public Room(String descricao, int x, int y) {
-        this.descricao = descricao;
+    public Room(String nome, int x, int y) {
+        this.nome = nome;
         this.x = x;
         this.y = y;
         this.items = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Room {
         vizinhos = new HashMap<>();
     }
 
-    public String getDescricao() { return descricao; }
+    public String getNome() { return nome; }
     public int getX() { return x; }
     public int getY() { return y; }
     public List<Item> getItems() { return items; }

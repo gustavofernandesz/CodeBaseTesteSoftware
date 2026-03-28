@@ -83,10 +83,10 @@
                         <value>--add-opens=java.base/java.util=ALL-UNNAMED</value>
                     </jvmArgs>
                     <targetClasses>
-                        <param>st.examples.*</param>
+                        <param>st.project.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>st.examples.*</param>
+                        <param>st.project.*</param>
                     </targetTests>
                 </configuration>
             </plugin>

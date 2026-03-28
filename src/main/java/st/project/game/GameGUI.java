@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
 import java.util.Stack;
 
 public class GameGUI extends JFrame implements GameEngine.TimerListener {
@@ -247,7 +246,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         if (moveu) {
             atualizarMapa();
             Room atual = engine.getJogador().getPosicaoAtual();
-            log("-> " + atual.getDescricao());
+            log("-> " + atual.getNome());
             if (!engine.getJogador().getInventario().isEmpty()) {
                 log("  Inv: " + engine.getJogador().getInventario());
             }
@@ -330,9 +329,9 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
             g.setStroke(new BasicStroke(1));
 
             // Nome da sala (abreviado)
-            String nome = room.getDescricao().length() > 6
-                    ? room.getDescricao().substring(0, 6)
-                    : room.getDescricao();
+            String nome = room.getNome().length() > 6
+                    ? room.getNome().substring(0, 6)
+                    : room.getNome();
             g.setFont(fontMono.deriveFont(9f));
             g.setColor(isPlayer ? ACCENT_TEAL : room.isBloqueada() ? TEXT_DIM : TEXT_LIGHT);
             drawStringCentered(g, nome, rx, ry, TILE_SIZE, 20);
