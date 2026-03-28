@@ -1,8 +1,6 @@
 package st.project.game;
 
 import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.*;
 
 public class GameEngine {
@@ -77,19 +75,16 @@ public class GameEngine {
     }
 
     private void iniciarTimer() {
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (jogoAtivo) {
-                    tempoRestante--;
+        timer = new Timer(1000, e -> {
+            if (jogoAtivo) {
+                tempoRestante--;
+                if (timerListener != null)
+                    timerListener.onTempoAtualizado(tempoRestante);
+                if (tempoRestante <= 0) {
+                    jogoAtivo = false;
+                    timer.stop();
                     if (timerListener != null)
-                        timerListener.onTempoAtualizado(tempoRestante);
-                    if (tempoRestante <= 0) {
-                        jogoAtivo = false;
-                        timer.stop();
-                        if (timerListener != null)
-                            timerListener.onJogoTerminado(false);
-                    }
+                        timerListener.onJogoTerminado(false);
                 }
             }
         });

@@ -110,9 +110,9 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         top.setPreferredSize(new Dimension(0, 52));
 
         // FIX #1: atribui diretamente aos campos em vez de recuperar via getComponent()
-        timeLabel   = makeLabel("Tempo: 60s",          fontTitle, ACCENT_GOLD, SwingConstants.CENTER);
-        JLabel title = makeLabel("CALICE SAGRADO",      fontTitle, TEXT_LIGHT,  SwingConstants.CENTER);
-        statusLabel  = makeLabel("Explorando...",       fontBody,  ACCENT_TEAL, SwingConstants.CENTER);
+        timeLabel   = makeLabel("Tempo: 60s",          fontTitle, ACCENT_GOLD);
+        JLabel title = makeLabel("CALICE SAGRADO",      fontTitle, TEXT_LIGHT);
+        statusLabel  = makeLabel("Explorando...",       fontBody,  ACCENT_TEAL);
 
         top.add(wrapCenter(timeLabel));
         top.add(wrapCenter(title));
@@ -152,7 +152,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         JPanel wrapper = new JPanel(new BorderLayout(0, 6));
         wrapper.setBackground(BG_PANEL);
 
-        JLabel hint = makeLabel("[ WASD / setas ]", fontMono.deriveFont(10f), TEXT_DIM, SwingConstants.CENTER);
+        JLabel hint = makeLabel("[ WASD / setas ]", fontMono.deriveFont(10f), TEXT_DIM);
         wrapper.add(hint, BorderLayout.NORTH);
 
         JPanel dpad = new JPanel(new GridBagLayout());
@@ -301,16 +301,16 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
 
             // Fundo — FIX #7: salas visitadas agora usam TILE_VISITED
             if (isPlayer) {
-                drawGradientRect(g, rx, ry, TILE_SIZE, TILE_SIZE,
+                drawGradientRect(g, rx, ry,
                         new Color(0x1A3A1A), TILE_PLAYER);
             } else if (room.isBloqueada()) {
-                drawGradientRect(g, rx, ry, TILE_SIZE, TILE_SIZE,
+                drawGradientRect(g, rx, ry,
                         TILE_LOCKED, new Color(0x22224A));
             } else if (visited) {
-                drawGradientRect(g, rx, ry, TILE_SIZE, TILE_SIZE,
+                drawGradientRect(g, rx, ry,
                         TILE_VISITED, new Color(0x32325A));
             } else {
-                drawGradientRect(g, rx, ry, TILE_SIZE, TILE_SIZE,
+                drawGradientRect(g, rx, ry,
                         TILE_NORMAL, new Color(0x26264E));
             }
 
@@ -334,7 +334,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
                     : room.getNome();
             g.setFont(fontMono.deriveFont(9f));
             g.setColor(isPlayer ? ACCENT_TEAL : room.isBloqueada() ? TEXT_DIM : TEXT_LIGHT);
-            drawStringCentered(g, nome, rx, ry, TILE_SIZE, 20);
+            drawStringCentered(g, nome, rx, ry, 20);
 
             // FIX #9: cadeado desenhado geometricamente — sem dependência de suporte a emoji
             if (room.isBloqueada()) {
@@ -343,7 +343,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
 
             // Ícone de item
             if (!room.getItems().isEmpty()) {
-                drawItemGem(g, rx + TILE_SIZE - 18, ry + 5, 12);
+                drawItemGem(g, rx + TILE_SIZE - 18, ry + 5);
             }
 
             // Ícone do jogador
@@ -365,7 +365,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
             g.setStroke(new BasicStroke(1));
             g.setFont(fontBody.deriveFont(Font.BOLD, 11f));
             g.setColor(ACCENT_GOLD);
-            drawStringCentered(g, "CALICE", rx, ry, TILE_SIZE, TILE_SIZE - 6);
+            drawStringCentered(g, "CALICE", rx, ry, TILE_SIZE - 6);
         }
     }
 
@@ -373,16 +373,16 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
     // Utilitários de desenho
     // ─────────────────────────────────────────────────────────────────────────
 
-    private void drawGradientRect(Graphics2D g, int x, int y, int w, int h, Color c1, Color c2) {
-        GradientPaint gp = new GradientPaint(x, y, c1, x + w, y + h, c2);
+    private void drawGradientRect(Graphics2D g, int x, int y, Color c1, Color c2) {
+        GradientPaint gp = new GradientPaint(x, y, c1, x + GameGUI.TILE_SIZE, y + GameGUI.TILE_SIZE, c2);
         g.setPaint(gp);
-        g.fillRoundRect(x, y, w, h, 6, 6);
+        g.fillRoundRect(x, y, GameGUI.TILE_SIZE, GameGUI.TILE_SIZE, 6, 6);
         g.setPaint(null);
     }
 
-    private void drawStringCentered(Graphics2D g, String s, int rx, int ry, int w, int offsetY) {
+    private void drawStringCentered(Graphics2D g, String s, int rx, int ry, int offsetY) {
         FontMetrics fm = g.getFontMetrics();
-        int tx = rx + (w - fm.stringWidth(s)) / 2;
+        int tx = rx + (GameGUI.TILE_SIZE - fm.stringWidth(s)) / 2;
         g.drawString(s, tx, ry + offsetY);
     }
 
@@ -403,16 +403,16 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         g.setStroke(new BasicStroke(1));
     }
 
-    private void drawItemGem(Graphics2D g, int x, int y, int r) {
+    private void drawItemGem(Graphics2D g, int x, int y) {
         g.setColor(new Color(0xFF, 0x00, 0xFF, 60));
-        g.fillOval(x - 2, y - 2, r + 4, r + 4);
-        GradientPaint gp = new GradientPaint(x, y, new Color(0xFF66FF), x + r, y + r, new Color(0x9900CC));
+        g.fillOval(x - 2, y - 2, 12 + 4, 12 + 4);
+        GradientPaint gp = new GradientPaint(x, y, new Color(0xFF66FF), x + 12, y + 12, new Color(0x9900CC));
         g.setPaint(gp);
-        g.fillOval(x, y, r, r);
+        g.fillOval(x, y, 12, 12);
         g.setPaint(null);
         g.setColor(new Color(0xFF99FF));
         g.setStroke(new BasicStroke(0.8f));
-        g.drawOval(x, y, r, r);
+        g.drawOval(x, y, 12, 12);
         g.setStroke(new BasicStroke(1));
     }
 
@@ -478,8 +478,8 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         logArea.setCaretPosition(logArea.getDocument().getLength());
     }
 
-    private JLabel makeLabel(String text, Font font, Color color, int align) {
-        JLabel l = new JLabel(text, align);
+    private JLabel makeLabel(String text, Font font, Color color) {
+        JLabel l = new JLabel(text, SwingConstants.CENTER);
         l.setFont(font);
         l.setForeground(color);
         l.setOpaque(false);
