@@ -41,8 +41,7 @@ public class Room {
 
     public boolean contemItem(Item.Type tipo) {
         for (Item i : items) {
-            if (i.getTipo() == tipo) return true;
-        }
+            if (i.getTipo() == tipo) return true;}
         return false;
     }
 

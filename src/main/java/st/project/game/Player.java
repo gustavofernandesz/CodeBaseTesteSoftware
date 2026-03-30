@@ -29,13 +29,17 @@ public class Player {
         }
         this.posicaoAtual = destino;
         historico.push(destino);
-        System.out.println(historico);
         return true;
     }
 
     public void adicionarItem(Item item) {
         if (item == null) return;
         inventario.add(item);
+    }
+
+    public Item removerItem(Item item) {
+        if (inventario.remove(item)) return item;
+        return null;
     }
 
     public boolean possuiItem(Item.Type tipo) {

@@ -139,4 +139,43 @@ public class RoomFronteiraTest {
 
         assertThat(room.getItemPorTipo(pocao.getTipo())).isEqualTo(null);
     }
+    @Test
+    @DisplayName("Teste de Fronteira: Verificar item buscado retorna null se não possuir o tipo de item buscado no vetor")
+    void testeFronteiraContemItem() {
+        Item chave = new Item("Chave Encantada", Item.Type.CHAVE, "Abre a sala do cálice");
+
+        room.adicionarItem(chave);
+
+        assertThat(room.contemItem(Item.Type.CHAVE)).isTrue();
+    }
+
+    @Test
+    @DisplayName("Teste de Fronteira: Verificar item buscado retorna null se não possuir o tipo de item buscado no vetor")
+    void testeFronteiraNaoContemItem() {
+        Item chave = new Item("Chave Encantada", Item.Type.CHAVE, "Abre a sala do cálice");
+
+        room.adicionarItem(chave);
+
+        assertThat(room.contemItem(Item.Type.POCAO_VELOCIDADE)).isFalse();
+    }
+
+
+
+//    @Test
+//    @DisplayName("Teste de Fronteira: Verificar item buscado retorna null se não possuir o tipo de item buscado no vetor")
+//    void testeFronteiraGetItemPorTipoTipoIgual() {
+//        Item chave = new Item("Chave Encantada", Item.Type.CHAVE, "Abre a sala do cálice");
+//        room.adicionarItem(chave);
+//
+//        assertThat(room.getItemPorTipo(Item.Type.CHAVE)).isEqualTo(chave);}
+//
+//
+//    @Test
+//    @DisplayName("Teste de Fronteira: getItemPorTipo retorna null quando o tipo não existe na sala")
+//    void testeFronteiraGetItemPorTipoTipoDiferente() {
+//        Item chave = new Item("Chave Encantada", Item.Type.CHAVE, "Abre a sala do cálice");
+//        room.adicionarItem(chave);
+//
+//        assertThat(room.getItemPorTipo(Item.Type.CALICE)).isNull();
+//    }
 }
