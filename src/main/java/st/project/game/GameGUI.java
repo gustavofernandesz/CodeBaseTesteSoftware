@@ -115,7 +115,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         timeLabel   = makeLabel("Tempo: 60s",          fontTitle, ACCENT_GOLD);
         JLabel title = makeLabel("CALICE SAGRADO",      fontTitle, TEXT_LIGHT);
         statusLabel  = makeLabel("Explorando...",       fontBody,  ACCENT_TEAL);
-        movesLabel   = makeLabel("Mov: 12",         fontTitle, ACCENT_PURPLE);
+        movesLabel   = makeLabel("Mov: 7",         fontTitle, ACCENT_PURPLE);
 
 
         top.add(wrapCenter(timeLabel));
@@ -358,7 +358,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         }
 
         // Destaque do cálice (amuleto ativo)
-        if (engine.isAmuletoAtivo()) {
+        if (engine.isChaveAtiva()) {
             Room caliceRoom = engine.getMissao().getSalaCalice();
             int rx = caliceRoom.getX() * TILE_SIZE + pad;
             int ry = caliceRoom.getY() * TILE_SIZE + pad;

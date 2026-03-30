@@ -11,7 +11,7 @@ public class GameEngine {
     private Timer timer;
     private boolean jogoAtivo;
     private final TimerListener timerListener;
-    private static final int MAX_MOVIMENTOS = 12;
+    private static final int MAX_MOVIMENTOS = 7;
     private int movimentosRestantes = MAX_MOVIMENTOS;
 
 
@@ -84,7 +84,7 @@ public class GameEngine {
         // Colocar itens em salas específicas
         salas.get("biblioteca").adicionarItem(new Item("Chave Encantada", Item.Type.CHAVE, "Abre a sala do cálice"));
         salas.get("cozinha").adicionarItem(new Item("Poção de Velocidade", Item.Type.POCAO_VELOCIDADE, "Dobra o tempo restante"));
-        salas.get("jardim").adicionarItem(new Item("Amuleto de Visão", Item.Type.AMULETO_VISAO, "Revela localização do cálice"));
+        salas.get("jardim").adicionarItem(new Item("Amuleto de Movimentos", Item.Type.AMULETO_VISAO, "Aumenta seus movimentos em 3"));
         salas.get("sagrado").adicionarItem(new Item("Cálice Mágico", Item.Type.CALICE, "O objeto da missão"));
     }
 
@@ -162,10 +162,10 @@ public class GameEngine {
                     timerListener.onTempoAtualizado(tempoRestante);
                 break;
             case AMULETO_VISAO:
-                // Revelar localização do cálice: pode ser tratado na GUI via listener
-                // Por simplicidade, apenas ativamos um flag que a GUI pode consultar
-                // Mas aqui não temos acesso direto à GUI. Deixamos para a GUI verificar
-                // se o jogador possui o amuleto e mostrar o destino.
+                movimentosRestantes += 3;
+                if (timerListener != null)
+                    timerListener.onMovimentoRealizado(movimentosRestantes);
+
                 break;
             case CHAVE:
                 // A chave é usada automaticamente para destrancar a sala do cálice
@@ -183,5 +183,5 @@ public class GameEngine {
     public Map<String, Room> getSalas() { return salas; }
     public int getTempoRestante() { return tempoRestante; }
     public boolean isJogoAtivo() { return jogoAtivo; }
-    public boolean isAmuletoAtivo() { return jogador.possuiItem(Item.Type.AMULETO_VISAO); }
+    public boolean isChaveAtiva() { return jogador.possuiItem(Item.Type.CHAVE); }
 }
