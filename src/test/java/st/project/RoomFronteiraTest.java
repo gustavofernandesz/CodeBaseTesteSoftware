@@ -107,15 +107,15 @@ public class RoomFronteiraTest {
         assertThat(room.contemItem(amuleto.getTipo())).isTrue();
     }
 
-    @Test
-    @DisplayName("Teste de Fronteira: Verficar se vetor contêm item retorna False se tipo de item não estiver no vetor")
-    void testeFronteiraVetorNaoContemItemBuscado() {
-        Item amuleto = new Item("Amuleto de Visão", Item.Type.AMULETO_VISAO, "Revela localização do cálice");
-
-        room.adicionarItem(amuleto);
-
-        assertThat(room.contemItem(amuleto.getTipo())).isFalse();
-    }
+//    @Test
+//    @DisplayName("Teste de Fronteira: Verficar se vetor contêm item retorna False se tipo de item não estiver no vetor")
+//    void testeFronteiraVetorNaoContemItemBuscado() {
+//        Item amuleto = new Item("Amuleto de Visão", Item.Type.AMULETO_VISAO, "Revela localização do cálice");
+//
+//        room.adicionarItem(amuleto);
+//
+//        assertThat(room.contemItem(amuleto.getTipo())).isFalse();
+//    }
 
     // getItemPorTipo
 

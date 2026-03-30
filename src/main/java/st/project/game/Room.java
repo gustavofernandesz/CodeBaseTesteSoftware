@@ -62,4 +62,6 @@ public class Room {
     public Room getVizinho(String direcao) {
         return vizinhos.get(direcao);
     }
+
+
 }

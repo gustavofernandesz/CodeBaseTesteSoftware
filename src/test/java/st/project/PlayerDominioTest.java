@@ -55,7 +55,7 @@ public class PlayerDominioTest {
     @DisplayName("Teste de Dominio: Retorna True se player mover para outra sala")
     void testeDominioMoverPara() {
         Room segundaSala = new Room("Segunda Sala", 0, 1);
-        assertThat(player.moverPara(salaInicial)).isTrue();
+        assertThat(player.moverPara(segundaSala)).isTrue();
     }
 
     // adicionarItem

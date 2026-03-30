@@ -11,10 +11,14 @@ public class GameEngine {
     private Timer timer;
     private boolean jogoAtivo;
     private final TimerListener timerListener;
+    private static final int MAX_MOVIMENTOS = 12;
+    private int movimentosRestantes = MAX_MOVIMENTOS;
+
 
     public interface TimerListener {
         void onTempoAtualizado(int segundosRestantes);
         void onJogoTerminado(boolean vitoria);
+        void onMovimentoRealizado(int movRestantes);
     }
 
     public GameEngine(TimerListener listener) {
@@ -30,36 +34,46 @@ public class GameEngine {
 
     private void inicializarMapa() {
         salas = new HashMap<>();
-        // 25 salas para grid 5x5
-        String[] nomes = {
-                "entrada", "sala1", "sala2", "sala3", "sala4",
+        // Nomes das salas intermediárias (tudo exceto "entrada" e "sagrado")
+        List<String> nomesIntermedios = new ArrayList<>(Arrays.asList(
+                "sala1", "sala2", "sala3", "sala4",
                 "corredor", "biblioteca", "sala5", "sala6", "sala7",
                 "jardim", "cozinha", "sala8", "sala9", "sala10",
                 "torre", "sala11", "sala12", "sala13", "sala14",
-                "sala15", "sala16", "sala17", "sala18", "sagrado"
-        };
-        // Criar todas as salas
+                "sala15", "sala16", "sala17", "sala18"
+        ));
+
+        // Embaralha apenas as salas do meio
+        Collections.shuffle(nomesIntermedios, new Random());
+
+        // Monta o array final: entrada fixa na pos 0 (x=0,y=0),
+        // sagrado fixo na pos 24 (x=4,y=4)
+        String[] nomes = new String[25];
+        nomes[0]  = "entrada";
+        nomes[24] = "sagrado";
+        for (int i = 0; i < nomesIntermedios.size(); i++) {
+            nomes[i + 1] = nomesIntermedios.get(i);
+        }
+
+        // Criar todas as salas com coordenadas de grid (x=coluna, y=linha)
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 int idx = i * 5 + j;
-                String nome = nomes[idx];
-                Room r = new Room(nome, j, i); // x=j, y=i
-                salas.put(nome, r);
+                Room r = new Room(nomes[idx], j, i);
+                salas.put(nomes[idx], r);
             }
         }
+
+
         // Configurar adjacências (4 direções)
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 int idx = i * 5 + j;
                 Room r = salas.get(nomes[idx]);
-                // norte
-                if (i > 0) r.setVizinho("norte", salas.get(nomes[(i-1)*5 + j]));
-                // sul
-                if (i < 4) r.setVizinho("sul", salas.get(nomes[(i+1)*5 + j]));
-                // oeste
-                if (j > 0) r.setVizinho("oeste", salas.get(nomes[i*5 + (j-1)]));
-                // leste
-                if (j < 4) r.setVizinho("leste", salas.get(nomes[i*5 + (j+1)]));
+                if (i > 0) r.setVizinho("norte", salas.get(nomes[(i - 1) * 5 + j]));
+                if (i < 4) r.setVizinho("sul",   salas.get(nomes[(i + 1) * 5 + j]));
+                if (j > 0) r.setVizinho("oeste",  salas.get(nomes[i * 5 + (j - 1)]));
+                if (j < 4) r.setVizinho("leste",  salas.get(nomes[i * 5 + (j + 1)]));
             }
         }
         // Bloquear sala do cálice
@@ -93,23 +107,39 @@ public class GameEngine {
 
     public boolean moverJogador(String direcao) {
         if (!jogoAtivo) return false;
+
+        // Verifica limite de movimentos antes de tentar mover
+        if (movimentosRestantes <= 0) {
+            encerrarJogo(false);
+            return false;
+        }
+
         Room atual = jogador.getPosicaoAtual();
         Room destino = atual.getVizinho(direcao);
         if (destino == null) return false;
         boolean moveu = jogador.moverPara(destino);
         if (moveu) {
-            // Coletar itens da nova sala automaticamente
+            movimentosRestantes--;
+            if (timerListener != null)
+                timerListener.onMovimentoRealizado(movimentosRestantes); // sem cast
             coletarItensSala();
             // Verificar missão
             missao.verificarProgresso(jogador);
             if (missao.isMissaoConcluida()) {
-                jogoAtivo = false;
-                timer.stop();
-                if (timerListener != null)
-                    timerListener.onJogoTerminado(true);
+                encerrarJogo(true);
+                return true;
+            }
+            if (movimentosRestantes <= 0) {
+                encerrarJogo(false);
             }
         }
         return moveu;
+    }
+    private void encerrarJogo(boolean vitoria) {
+        jogoAtivo = false;
+        timer.stop();
+        if (timerListener != null)
+            timerListener.onJogoTerminado(vitoria);
     }
 
     private void coletarItensSala() {

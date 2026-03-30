@@ -26,7 +26,8 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
     // Corrigido para construtor RGB explícito.
     private static final Color PATH_COLOR    = new Color(0x60, 0x60, 0xB0);
 
-    private static final int TILE_SIZE = 72;
+
+    private static final int TILE_SIZE = 132;
 
     private final GameEngine engine;
     private final JPanel     mapPanel;
@@ -36,6 +37,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
     // que causava ClassCastException.
     private JLabel timeLabel;
     private JLabel statusLabel;
+    private JLabel movesLabel;
 
     private final JTextArea logArea;
 
@@ -113,10 +115,13 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         timeLabel   = makeLabel("Tempo: 60s",          fontTitle, ACCENT_GOLD);
         JLabel title = makeLabel("CALICE SAGRADO",      fontTitle, TEXT_LIGHT);
         statusLabel  = makeLabel("Explorando...",       fontBody,  ACCENT_TEAL);
+        movesLabel   = makeLabel("Mov: 12",         fontTitle, ACCENT_PURPLE);
+
 
         top.add(wrapCenter(timeLabel));
         top.add(wrapCenter(title));
         top.add(wrapCenter(statusLabel));
+        top.add(wrapCenter(movesLabel));
         return top;
     }
 
@@ -152,7 +157,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
         JPanel wrapper = new JPanel(new BorderLayout(0, 6));
         wrapper.setBackground(BG_PANEL);
 
-        JLabel hint = makeLabel("[ WASD / setas ]", fontMono.deriveFont(10f), TEXT_DIM);
+        JLabel hint = makeLabel("[ WASD / Botões ]", fontMono.deriveFont(10f), TEXT_DIM);
         wrapper.add(hint, BorderLayout.NORTH);
 
         JPanel dpad = new JPanel(new GridBagLayout());
@@ -329,10 +334,10 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
             g.setStroke(new BasicStroke(1));
 
             // Nome da sala (abreviado)
-            String nome = room.getNome().length() > 6
-                    ? room.getNome().substring(0, 6)
+            String nome = room.getNome().length() > 10
+                    ? room.getNome().substring(0, 10)
                     : room.getNome();
-            g.setFont(fontMono.deriveFont(9f));
+            g.setFont(fontMono.deriveFont(16f));
             g.setColor(isPlayer ? ACCENT_TEAL : room.isBloqueada() ? TEXT_DIM : TEXT_LIGHT);
             drawStringCentered(g, nome, rx, ry, 20);
 
@@ -467,6 +472,14 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
                     "Tempo esgotado! Fim de jogo.",
                     "FIM DE JOGO", JOptionPane.WARNING_MESSAGE);
         }
+    }
+    @Override
+    public void onMovimentoRealizado(int movRestantes) {
+        Color cor = movRestantes <= 3 ? new Color(0xFF4444)
+                : movRestantes <= 5 ? new Color(0xFFAA00)
+                : ACCENT_PURPLE;
+        movesLabel.setForeground(cor);
+        movesLabel.setText("Mov: " + movRestantes);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
