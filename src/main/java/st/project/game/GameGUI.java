@@ -27,7 +27,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
     private static final Color PATH_COLOR    = new Color(0x60, 0x60, 0xB0);
 
 
-    private static final int TILE_SIZE = 132;
+    private static final int TILE_SIZE = 100;
 
     private final GameEngine engine;
     private final JPanel     mapPanel;
