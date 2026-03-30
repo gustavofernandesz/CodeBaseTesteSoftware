@@ -6,6 +6,7 @@ import st.project.game.Item;
 import st.project.game.Player;
 import st.project.game.Room;
 
+<<<<<<< Updated upstream
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -105,3 +106,134 @@ public class PlayerDominioTest {
         assertThat(player.getInventario().isEmpty()).isTrue();
     }
 }
+=======
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class PlayerDominioTest {
+
+// Teste de domínio
+// MOVIMENTO
+
+
+    @Test
+    @DisplayName("Teste de domínio: deve aprovar caso obedeça regras")
+    void testeDominioMoverSucesso() {
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino = new Room("destino", 1, 0);
+        Player player = new Player(inicio);
+        assertThat(player.moverPara(destino)).isTrue();
+    }
+    @Test
+    @DisplayName("Teste de domínio: deve falhar caso destino esteja bloqueado")
+    void testeDominioMoverInsucesso() {
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino = new Room("destino", 1, 0);
+        destino.setBloqueada(true);
+        Player player = new Player(inicio);
+
+
+        assertThat(player.moverPara(destino)).isFalse();
+    }
+
+    @Test
+    @DisplayName("Teste de domínio: deve falhar caso destino seja null")
+    void testeDominioMoverNullInsucesso() {
+
+        Room inicio = new Room("inicio", 0, 0);
+        Player player = new Player(inicio);
+
+        assertThat(player.moverPara(null)).isFalse();
+    }
+
+    @Test
+    @DisplayName("Teste de domínio: deve falhar caso destino seja null")
+    void testeDominioMoverComChavesucesso() {
+
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino =  new Room("destino", 1, 0);
+        Player player = new Player(inicio);
+        destino.setBloqueada(true);
+        player.adicionarItem(new Item("chave", Item.Type.CHAVE, "chave"));
+
+        assertThat(player.moverPara(destino)).isTrue();
+    }
+    @Test
+    @DisplayName("Teste de domínio: deve atualizar o historico com o novo lugar visitado")
+    void testeDominioAtualizarHistoricoAoMover() {
+
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino =  new Room("destino", 1, 0);
+        Player player = new Player(inicio);
+        player.moverPara(destino);
+        assertThat(player.getHistorico().contains(destino)).isTrue();
+    }
+
+
+
+    // ATUALIZAR INVENTÁRIO
+    @Test
+    @DisplayName("Teste de domínio: deve aprovar caso obedeça regras")
+    void testeDominioAdicionarItemSucesso() {
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino = new Room("destino", 1, 0);
+        Player player = new Player(inicio);
+        Item item = new Item("chave", Item.Type.CHAVE, "chave");
+        player.adicionarItem(item);
+        assertThat(player.getInventario().contains(item)).isTrue();
+    }
+
+    @Test
+    @DisplayName("Teste de domínio: deve retornar verdadeiro caso possua item de um tipo")
+    void testeDominioPossuirItem() {
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino = new Room("destino", 1, 0);
+        Player player = new Player(inicio);
+        Item item = new Item("chave", Item.Type.CHAVE, "chave");
+        player.adicionarItem(item);
+        assertThat(player.possuiItem(Item.Type.CHAVE)).isTrue();
+    }
+
+    @Test
+    @DisplayName("Teste de domínio: deve retornar verdadeiro caso possua item de um tipo")
+    void testeDominioNaoPossuirItem() {
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino = new Room("destino", 1, 0);
+        Player player = new Player(inicio);
+        Item item = new Item("chave", Item.Type.CHAVE, "chave");
+        player.adicionarItem(item);
+        assertThat(player.possuiItem(null)).isFalse();
+    }
+
+    @Test
+    @DisplayName("Teste de domínio: deve retornar falso que possui item usadpo caso obedeça as regras para poder usar item")
+    void testeDominioUsarItem() {
+        Room inicio = new Room("inicio", 0, 0);
+        Room destino = new Room("destino", 1, 0);
+        Player player = new Player(inicio);
+        Item item = new Item("chave", Item.Type.AMULETO_VISAO, "descrição");
+        player.usarItem(item);
+        assertThat(player.getInventario().contains(item)).isFalse();
+    }
+
+    //public boolean possuiItem(Item.Type tipo) {
+        //return inventario.stream().anyMatch(i -> i.getTipo() == tipo);
+   // }
+
+
+
+}
+
+
+
+//public boolean moverPara(Room destino) {
+//        if (destino == null) return false;
+//        if (destino.isBloqueada()) {
+//            // verifica se possui chave
+//            boolean temChave = inventario.stream().anyMatch(i -> i.getTipo() == Item.Type.CHAVE);
+//            if (!temChave) return false;
+//        }
+//        this.posicaoAtual = destino;
+//        historico.push(destino);
+//        return true;
+//    }
+>>>>>>> Stashed changes
