@@ -17,7 +17,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
     private static final Color ACCENT_TEAL   = new Color(0x2DD4BF);
     private static final Color TEXT_LIGHT    = new Color(0xE8E8F0);
     private static final Color TEXT_DIM      = new Color(0x7878A0);
-    private static final Color TILE_VISITED  = new Color(0x2A2A50); // FIX #7: agora utilizado
+    private static final Color TILE_VISITED  = new Color(0x02FA7A); // FIX #7: agora utilizado
     private static final Color TILE_LOCKED   = new Color(0x1A1A2E);
     private static final Color TILE_NORMAL   = new Color(0x1E1E3C);
     private static final Color TILE_PLAYER   = new Color(0x2E4A2E);
@@ -27,7 +27,7 @@ public class GameGUI extends JFrame implements GameEngine.TimerListener {
     private static final Color PATH_COLOR    = new Color(0x60, 0x60, 0xB0);
 
 
-    private static final int TILE_SIZE = 132;
+    private static final int TILE_SIZE = 100;
 
     private final GameEngine engine;
     private final JPanel     mapPanel;
