@@ -41,6 +41,8 @@ public class GameEngine {
                 "jardim", "cozinha", "sala8", "sala9", "sala10",
                 "torre", "sala11", "sala12", "sala13", "sala14",
                 "sala15", "sala16", "sala17", "sala18"
+
+
         ));
 
         // Embaralha apenas as salas do meio
@@ -183,5 +185,6 @@ public class GameEngine {
     public Map<String, Room> getSalas() { return salas; }
     public int getTempoRestante() { return tempoRestante; }
     public boolean isJogoAtivo() { return jogoAtivo; }
+    public void setJogoAtivo(boolean ativo){this.jogoAtivo = ativo;}
     public boolean isChaveAtiva() { return jogador.possuiItem(Item.Type.CHAVE); }
 }
