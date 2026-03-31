@@ -24,11 +24,23 @@ GameEngine gameEngine = new GameEngine(null);
     @Test
     @DisplayName("Teste de domínio: deve retornar verdadeiro caso respeite as regras e possa mover")
     void testeDominioDeveMover() {
-        gameEngine = new GameEngine(null);
 
         boolean moveu = gameEngine.moverJogador("sul"); // direção válida
 
         assertThat(moveu).isTrue();
+    }
+
+    @Test
+    @DisplayName("Teste de domínio: deve retornar verdadeiro caso respeite as regras e possa mover")
+    void testeDominioNãoDeveMoverSemMovimentosRestantes() {
+        gameEngine.setJogoAtivo(true);
+        for (int i = 0; i < 10; i++) {
+            gameEngine.moverJogador("sul");
+        }
+
+        boolean moveu = gameEngine.moverJogador("sul"); // direção válida
+
+        assertThat(moveu).isFalse();
     }
     }
 
