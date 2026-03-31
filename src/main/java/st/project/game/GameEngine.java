@@ -144,7 +144,7 @@ public class GameEngine {
             timerListener.onJogoTerminado(vitoria);
     }
 
-    private void coletarItensSala() {
+    public void coletarItensSala() {
         Room atual = jogador.getPosicaoAtual();
         List<Item> itens = new ArrayList<>(atual.getItems());
         for (Item item : itens) {

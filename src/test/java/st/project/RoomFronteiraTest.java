@@ -8,7 +8,23 @@ import st.project.game.Room;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoomFronteiraTest {
-    Room room = new Room("Sala de Teste", 0, 0);
+    Room room = new Room("Sala de Teste", 1, 2);
+
+    // getX
+
+    @Test
+    @DisplayName("Teste de Dominio: getX retorna a posicao X da sala")
+    void testeDominioGetX() {
+        assertThat(room.getX()).isEqualTo(1);
+    }
+
+    // getY
+
+    @Test
+    @DisplayName("Teste de Dominio: getY retorna a posicao Y da sala")
+    void testeDominioGetY() {
+        assertThat(room.getY()).isEqualTo(2);
+    }
 
     // isBloqueada
 
