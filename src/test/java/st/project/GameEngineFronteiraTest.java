@@ -19,7 +19,7 @@ public class GameEngineFronteiraTest {
     @Test
     @DisplayName("Teste de Fronteira: deve retornar false se movimentos == 0")
     void TestFronteiraNaoMoverSeMovimentosZero(){
-        gameEngine.setJogoAtivo(true);
+
         gameEngine.setMovimentosRestantes(0);
         boolean moveu = gameEngine.moverJogador("sul"); // direção válida
 
@@ -28,7 +28,7 @@ public class GameEngineFronteiraTest {
     @Test
     @DisplayName("Teste de Fronteira: deve retornar false se movimentos == 1")
     void TestFronteiraMoverSeMovimentosUm(){
-        gameEngine.setJogoAtivo(true);
+
         gameEngine.setMovimentosRestantes(1);
         boolean moveu = gameEngine.moverJogador("sul"); // direção válida
 
@@ -37,9 +37,15 @@ public class GameEngineFronteiraTest {
     @Test
     @DisplayName("Teste de Fronteira: deve retornar false se movimentos == 1")
     void TestFronteiraMoverSeMovimentosMenorZero(){
-        gameEngine.setJogoAtivo(true);
+
         gameEngine.setMovimentosRestantes(-1);
         boolean moveu = gameEngine.moverJogador("sul"); // direção válida
+
+        assertThat(moveu).isFalse();
+    }
+    @Test
+    void naoDeveMoverComDirecaoNull() {
+        boolean moveu = gameEngine.moverJogador(null);
 
         assertThat(moveu).isFalse();
     }

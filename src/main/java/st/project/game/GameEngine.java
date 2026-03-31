@@ -188,4 +188,6 @@ public class GameEngine {
     public void setJogoAtivo(boolean ativo){this.jogoAtivo = ativo;}
     public boolean isChaveAtiva() { return jogador.possuiItem(Item.Type.CHAVE); }
     public void setMovimentosRestantes(int movimentos){this.movimentosRestantes = movimentos;    }
+    public void setTempoRestante(int tempo){this.tempoRestante = tempo;}
+    public int getMovimentosRestantes(){return this.movimentosRestantes;}
 }
