@@ -31,8 +31,21 @@ public class GameEngine {
         this.tempoRestante = 60;
         iniciarTimer();
     }
+    public GameEngine(TimerListener listener, Random seed) {
+        this.timerListener = listener;
+        this.jogoAtivo = true;
+        inicializarMapa(seed);
+        inicializarItens();
+        this.jogador = new Player(salas.get("entrada"));
+        this.missao = new Mission(salas.get("sagrado"));
+        this.tempoRestante = 60;
+        iniciarTimer();
+    }
 
     private void inicializarMapa() {
+        inicializarMapa(new Random());
+    }
+    private void inicializarMapa(Random seed) {
         salas = new HashMap<>();
         // Nomes das salas intermediárias (tudo exceto "entrada" e "sagrado")
         List<String> nomesIntermedios = new ArrayList<>(Arrays.asList(
@@ -46,7 +59,7 @@ public class GameEngine {
         ));
 
         // Embaralha apenas as salas do meio
-        Collections.shuffle(nomesIntermedios, new Random());
+        Collections.shuffle(nomesIntermedios, seed);
 
         // Monta o array final: entrada fixa na pos 0 (x=0,y=0),
         // sagrado fixo na pos 24 (x=4,y=4)
