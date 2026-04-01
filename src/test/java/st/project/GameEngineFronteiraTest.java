@@ -56,6 +56,28 @@ class GameEngineFronteiraTest {
     }
 
     @Test
+    @DisplayName("Teste de Fronteira: Mudar o tempo restante para um valor maior que o inicial")
+    void testeDominioSetTempoRestanteMaiorQueInicial() {
+        engine.setTempoRestante(120);
+        assertEquals(120, engine.getTempoRestante());
+    }
+
+    @Test
+    @DisplayName("Teste de Fronteira: Mudar o tempo restante para um valor menor que o inicial")
+    void testeDominioSetTempoRestanteMenorQueInicial() {
+        engine.setTempoRestante(30);
+        assertEquals(30, engine.getTempoRestante());
+
+    }
+
+    @Test
+    @DisplayName("Teste de Fronteira: Mudar o tempo restante para zero")
+    void testeDominioSetTempoRestanteParaZero() {
+        engine.setTempoRestante(0);
+        assertEquals(0, engine.getTempoRestante());
+    }
+
+    @Test
     @DisplayName("Teste de Fronteira: Quando tempo zerar, jogo deve ser encerrado")
     void testeFronteiraTempoRestanteZerar() throws Exception {
         // Simula a contagem regressiva do timer

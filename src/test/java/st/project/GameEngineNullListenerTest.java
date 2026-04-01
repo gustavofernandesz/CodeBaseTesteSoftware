@@ -1,10 +1,15 @@
 package st.project;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import st.project.game.GameEngine;
 import st.project.game.Item;
 import st.project.game.Room;
+
+import javax.swing.Timer;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,94 +19,84 @@ class GameEngineNullListenerTest {
 
     @BeforeEach
     void setUp() {
-        engine = new GameEngine(null); // listener nulo
+        engine = new GameEngine(null);
     }
 
     @Test
-    void moverJogador_ComListenerNull_DeveExecutarSemErro() {
-        // Tenta mover para uma direção válida
-        Room entrada = engine.getSalas().get("entrada");
-        Room vizinhoLeste = entrada.getVizinho("leste");
-        assertNotNull(vizinhoLeste);
-
-        boolean moveu = engine.moverJogador("leste");
-
-        assertTrue(moveu);
-        assertEquals(vizinhoLeste, engine.getJogador().getPosicaoAtual());
-        // Não deve lançar exceção por causa do listener nulo
-    }
-
-    @Test
-    void moverJogador_DirecaoInvalida_ComListenerNull_DeveRetornarFalse() {
-        Room entrada = engine.getSalas().get("entrada");
-        boolean moveu = engine.moverJogador("norte"); // pode ser nulo
-        if (entrada.getVizinho("norte") == null) {
-            assertFalse(moveu);
-        } else {
-            // Se existir, testa uma direção inexistente
-            assertFalse(engine.moverJogador("invalida"));
-        }
-        assertEquals(entrada, engine.getJogador().getPosicaoAtual());
-    }
-
-    @Test
-    void moverJogador_SemMovimentosRestantes_ComListenerNull_DeveEncerrarJogo() {
-        engine.setMovimentosRestantes(0);
-        boolean moveu = engine.moverJogador("leste");
-
-        assertFalse(moveu);
-        assertFalse(engine.isJogoAtivo());
-    }
-
-    @Test
-    void moverJogador_ColetaItemComEfeito_ComListenerNull_DeveAplicarEfeito() {
-        // Coloca um item de poção na sala de destino
-        Room entrada = engine.getSalas().get("entrada");
-        Room destino = entrada.getVizinho("leste");
-        assertNotNull(destino);
-        Item pocao = new Item("Poção", Item.Type.POCAO_VELOCIDADE, "Dobra tempo");
-        destino.adicionarItem(pocao);
-
+    @DisplayName("Timer deve funcionar sem listener e não lançar exceção")
+    void timerShouldWorkWithoutListener() throws Exception {
+        Timer timer = getTimerFromEngine(engine);
         int tempoAntes = engine.getTempoRestante();
-
-        engine.moverJogador("leste");
-
-        assertEquals(tempoAntes * 2, engine.getTempoRestante());
-        // Não verifica listener, apenas a aplicação do efeito
+        fireTimerAction(timer);
+        assertEquals(tempoAntes - 1, engine.getTempoRestante());
     }
 
     @Test
-    void moverJogador_ConcluiMissao_ComListenerNull_DeveEncerrarJogo() {
-        // Força conclusão da missão (coloca jogador na sala sagrado com chave)
-        Room sagrado = engine.getSalas().get("sagrado");
-        Room vizinha = obterVizinhaDe(sagrado);
-        engine.getJogador().moverPara(vizinha);
+    @DisplayName("Mover jogador sem listener não deve lançar exceção e deve movimentar")
+    void movePlayerWithoutListener() {
+        Room entrada = engine.getSalas().get("entrada");
+        Room vizinho = entrada.getVizinho("leste");
+        assertNotNull(vizinho);
+        assertTrue(engine.moverJogador("leste"));
+        assertEquals(vizinho, engine.getJogador().getPosicaoAtual());
+    }
 
-        // Dá a chave ao jogador
-        engine.getJogador().adicionarItem(new Item("Chave", Item.Type.CHAVE, ""));
+    @Test
+    @DisplayName("Coletar poção sem listener deve dobrar tempo sem exceção")
+    void collectPotionWithoutListener() {
+        Room atual = engine.getJogador().getPosicaoAtual();
+        Item pocao = new Item("Poção", Item.Type.POCAO_VELOCIDADE, "Dobra");
+        atual.adicionarItem(pocao);
+        int tempoAntes = engine.getTempoRestante();
+        engine.coletarItensSala();
+        assertEquals(tempoAntes * 2, engine.getTempoRestante());
+    }
 
-        String direcao = obterDirecaoPara(vizinha, sagrado);
-        boolean moveu = engine.moverJogador(direcao);
+    @Test
+    @DisplayName("Coletar amuleto sem listener deve aumentar movimentos sem exceção")
+    void collectAmuletWithoutListener() {
+        Room atual = engine.getJogador().getPosicaoAtual();
+        Item amuleto = new Item("Amuleto", Item.Type.AMULETO_VISAO, "+3");
+        atual.adicionarItem(amuleto);
+        int movAntes = engine.getMovimentosRestantes();
+        engine.coletarItensSala();
+        assertEquals(movAntes + 3, engine.getMovimentosRestantes());
+    }
 
-        assertTrue(moveu);
-        assertTrue(engine.getMissao().isMissaoConcluida());
+    @Test
+    @DisplayName("Encerrar jogo sem listener não deve lançar exceção")
+    void endGameWithoutListener() {
+        engine.setMovimentosRestantes(0);
+        engine.moverJogador("leste");
         assertFalse(engine.isJogoAtivo());
-        // Não deve lançar exceção
     }
 
-    // Métodos auxiliares (copiados de outros testes)
-    private Room obterVizinhaDe(Room room) {
-        for (String dir : new String[]{"norte", "sul", "leste", "oeste"}) {
-            Room viz = room.getVizinho(dir);
-            if (viz != null) return viz;
+    @Test
+    @DisplayName("Timer quando tempo zerar sem listener não deve lançar exceção")
+    void timerExpiresWithoutListener() throws Exception {
+        Timer timer = getTimerFromEngine(engine);
+        for (int i = 0; i < 60; i++) {
+            fireTimerAction(timer);
         }
-        throw new IllegalStateException("Sala sem vizinhos");
+        assertEquals(0, engine.getTempoRestante());
+        assertFalse(engine.isJogoAtivo());
     }
 
-    private String obterDirecaoPara(Room origem, Room destino) {
-        for (String dir : new String[]{"norte", "sul", "leste", "oeste"}) {
-            if (origem.getVizinho(dir) == destino) return dir;
+    // Utilitários para manipular o Timer interno
+    private Timer getTimerFromEngine(GameEngine engine) throws Exception {
+        Field field = GameEngine.class.getDeclaredField("timer");
+        field.setAccessible(true);
+        return (Timer) field.get(engine);
+    }
+
+    private void fireTimerAction(Timer timer) throws Exception {
+        Class<?> timerClass = timer.getClass();
+        Method getListeners = timerClass.getDeclaredMethod("getListeners", Class.class);
+        getListeners.setAccessible(true);
+        Object[] listeners = (Object[]) getListeners.invoke(timer, Class.forName("java.awt.event.ActionListener"));
+        if (listeners.length > 0) {
+            java.awt.event.ActionListener al = (java.awt.event.ActionListener) listeners[0];
+            al.actionPerformed(new java.awt.event.ActionEvent(timer, 0, null));
         }
-        throw new IllegalArgumentException("Destino não é vizinho");
     }
 }

@@ -183,11 +183,15 @@ public class GameEngine {
     public Player getJogador() { return jogador; }
     public Mission getMissao() { return missao; }
     public Map<String, Room> getSalas() { return salas; }
-    public int getTempoRestante() { return tempoRestante; }
+
     public boolean isJogoAtivo() { return jogoAtivo; }
     public void setJogoAtivo(boolean ativo){this.jogoAtivo = ativo;}
+
     public boolean isChaveAtiva() { return jogador.possuiItem(Item.Type.CHAVE); }
-    public void setMovimentosRestantes(int movimentos){this.movimentosRestantes = movimentos;    }
+
+    public int getTempoRestante() { return tempoRestante; }
     public void setTempoRestante(int tempo){this.tempoRestante = tempo;}
+
     public int getMovimentosRestantes(){return this.movimentosRestantes;}
+    public void setMovimentosRestantes(int movimentos){this.movimentosRestantes = movimentos;    }
 }
