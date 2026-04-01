@@ -1,6 +1,7 @@
 package st.project;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -31,19 +32,22 @@ class GameEngineEstruturaTest {
     }
 
     @Test
-    void inicializacao_MapaDeveTer25Salas() {
+    @DisplayName("Teste de Estrutura: Inicialização deve criar mapa com 25 salas")
+    void testeEstruturaInicializacaoMapa25Salas() {
         Map<String, Room> salas = engine.getSalas();
         assertEquals(25, salas.size());
     }
 
     @Test
-    void inicializacao_SalaSagradoDeveEstarBloqueada() {
+    @DisplayName("Teste de Estrutura: Sala sagrado deve iniciar bloqueada")
+    void testeEstruturaInicializacaoSalaSagradoBloqueada() {
         Room sagrado = engine.getSalas().get("sagrado");
         assertTrue(sagrado.isBloqueada());
     }
 
     @Test
-    void inicializacao_ItensDevemEstarNasSalasCorretas() {
+    @DisplayName("Teste de Estrutura: Adjacências iniciais do mapa devem estar corretas")
+    void testeEstruturaInicializacaoAdjacenciasCorretas() {
         // Verifica itens nas salas específicas
         assertTrue(engine.getSalas().get("biblioteca").getItems().stream()
                 .anyMatch(i -> i.getTipo() == Item.Type.CHAVE));
@@ -67,13 +71,15 @@ class GameEngineEstruturaTest {
     }
 
     @Test
-    void listener_NotificaMovimento() {
+    @DisplayName("Teste de Estrutura: Listener deve ser notificado ao movimentar")
+    void testeEstruturaListenerNotificaMovimento() {
         engine.moverJogador("leste");
         verify(listenerMock).onMovimentoRealizado(6);
     }
 
     @Test
-    void listener_NotificaTempo_QuandoTimerDispara() throws Exception {
+    @DisplayName("Teste de Estrutura: Listener deve ser notificado a cada tick do timer")
+    void testeEstruturaListenerNotificaTempoAoDispararTimer() throws Exception {
         Timer timer = getTimerFromEngine(engine);
         // Simula um tick do timer
         fireTimerAction(timer);
@@ -81,7 +87,8 @@ class GameEngineEstruturaTest {
     }
 
     @Test
-    void listener_NotificaFimDeJogo_QuandoTempoZera() throws Exception {
+    @DisplayName("Teste de Estrutura: Listener deve ser notificado ao esgotar o tempo")
+    void testeEstruturaListenerNotificaFimDeJogoQuandoTempoZera() throws Exception {
         Timer timer = getTimerFromEngine(engine);
         // Dispara 60 vezes
         for (int i = 0; i < 60; i++) {
@@ -91,7 +98,8 @@ class GameEngineEstruturaTest {
     }
 
     @Test
-    void aposEncerrarJogo_MovimentosSaoIgnorados() {
+    @DisplayName("Teste de Estrutura: Após jogo encerrado, movimentos devem ser ignorados")
+    void testeEstruturaAposEncerrarJogoMovimentosIgnorados() {
         engine.setJogoAtivo(false);
         boolean moveu = engine.moverJogador("leste");
         assertFalse(moveu);
@@ -99,7 +107,8 @@ class GameEngineEstruturaTest {
     }
 
     @Test
-    void aoEncerrarJogo_TimerPara() throws Exception {
+    @DisplayName("Teste de Estrutura: Ao encerrar jogo, timer deve parar de atualizar")
+    void testeEstruturaAoEncerrarJogoTimerPara() throws Exception {
         Timer timer = getTimerFromEngine(engine);
         // Encerra o jogo
         engine.setJogoAtivo(false);
@@ -111,7 +120,8 @@ class GameEngineEstruturaTest {
     }
 
     @Test
-    void chaveNaoEhConsumida_AoEntrarNoSagrado() {
+    @DisplayName("Teste de Estrutura: Chave não deve ser consumida ao entrar no sagrado")
+    void testeEstruturaChaveNaoConsumidaAoEntrarNoSagrado() {
         // Dá a chave ao jogador
         engine.getJogador().adicionarItem(new Item("Chave", Item.Type.CHAVE, ""));
         Room sagrado = engine.getSalas().get("sagrado");

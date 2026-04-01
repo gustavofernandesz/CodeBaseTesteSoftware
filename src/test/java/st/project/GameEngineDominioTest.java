@@ -1,6 +1,7 @@
 package st.project;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -26,7 +27,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void moverJogador_DirecaoValida_DeveMoverEDecrementarMovimentos() {
+    @DisplayName("Teste de Domínio: Mover para direção válida deve mover jogador e decrementar movimentos")
+    void testeDominioMoverJogadorDirecaoValida() {
         // Arrange: a partir da entrada, o vizinho leste deve existir
         Room entrada = engine.getSalas().get("entrada");
         Room vizinhoLeste = entrada.getVizinho("leste");
@@ -42,7 +44,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void moverJogador_DirecaoInvalida_DeveRetornarFalse() {
+    @DisplayName("Teste de Domínio: Mover para direção inválida deve retornar false e não alterar posição")
+    void testeDominioMoverJogadorDirecaoInvalida() {
         // Arrange: direção sem vizinho (norte da entrada pode não existir no grid)
         Room entrada = engine.getSalas().get("entrada");
         if (entrada.getVizinho("norte") != null) {
@@ -56,7 +59,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void moverJogador_ColetaItensDaSala_DeveAplicarEfeitos() {
+    @DisplayName("Teste de Domínio: Mover para sala com itens deve coletá-los e aplicar efeitos")
+    void testeDominioMoverJogadorColetaItensDaSala() {
         // Arrange: obter a sala de destino (vizinho leste da entrada)
         Room entrada = engine.getSalas().get("entrada");
         Room destino = entrada.getVizinho("leste");
@@ -77,7 +81,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void moverJogador_AoEntrarNaSalaSagradoComChave_DeveConcluirMissao() {
+    @DisplayName("Teste de Domínio: Entrar na sala sagrado com chave deve concluir a missão")
+    void testeDominioMoverJogadorEntrarSagradoComChave() {
         // Arrange: forçar posição do jogador para a sala anterior ao sagrado
         // e dar a chave a ele
         Room salaChave = engine.getSalas().get("biblioteca");
@@ -104,7 +109,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void moverJogador_TentarEntrarNoSagradoSemChave_DeveFalhar() {
+    @DisplayName("Teste de Domínio: Tentar entrar no sagrado sem chave deve falhar e manter posição")
+    void testeDominioMoverJogadorTentarEntrarSagradoSemChave() {
         // Arrange: posicionar jogador ao lado do sagrado sem ter a chave
         Room sagrado = engine.getSalas().get("sagrado");
         Room vizinha = obterVizinhaDe(sagrado);
@@ -123,7 +129,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void moverJogador_EsgotarMovimentos_DeveEncerrarJogoComDerrota() {
+    @DisplayName("Teste de Domínio: Esgotar movimentos ao mover deve encerrar jogo com derrota")
+    void testeDominioMoverJogadorEsgotarMovimentos() {
         // Arrange: reduzir movimentos para 1
         engine.setMovimentosRestantes(1);
 
@@ -136,7 +143,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void aplicarEfeito_Amuleto_DeveAumentarMovimentos() {
+    @DisplayName("Teste de Domínio: Coletar amuleto deve aumentar movimentos restantes")
+    void testeDominioAplicarEfeitoAmuleto() {
         // Arrange: colocar amuleto na sala do jogador e coletar
         Room atual = engine.getJogador().getPosicaoAtual();
         Item amuleto = new Item("Amuleto", Item.Type.AMULETO_VISAO, "+3 mov");
@@ -152,7 +160,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void coletarItem_CHAVE_NaoDeveDispararEventos() {
+    @DisplayName("Teste de Domínio: Coletar chave não deve disparar eventos de tempo ou término")
+    void testeDominioColetarItemChave() {
         Room atual = engine.getJogador().getPosicaoAtual();
         String direcao = "leste";
         Room destino = atual.getVizinho(direcao);
@@ -180,7 +189,8 @@ class GameEngineDominioTest {
     }
 
     @Test
-    void coletarItem_CALICE_DeveConcluirMissaoSemEfeitoAdicional() {
+    @DisplayName("Teste de Domínio: Coletar cálice após entrar no sagrado deve concluir missão sem efeitos adicionais")
+    void testeDominioColetarItemCalice() {
         // Força a entrada na sala sagrado com chave
         Room sagrado = engine.getSalas().get("sagrado");
         Room vizinha = obterVizinhaDe(sagrado);

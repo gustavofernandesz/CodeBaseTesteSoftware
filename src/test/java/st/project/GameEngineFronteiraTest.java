@@ -1,6 +1,7 @@
 package st.project;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -30,12 +31,14 @@ class GameEngineFronteiraTest {
     }
 
     @Test
-    void movimentosRestantes_ValorInicial_DeveSer7() {
+    @DisplayName("Teste de Fronteira: Valor inicial de movimentos deve ser 7")
+    void testeFronteiraMovimentosRestantesValorInicial() {
         assertEquals(7, engine.getMovimentosRestantes());
     }
 
     @Test
-    void movimentosRestantes_QuandoChegarAZero_MoverDeveFalhar() {
+    @DisplayName("Teste de Fronteira: Quando movimentos chegam a zero, mover deve falhar e encerrar jogo")
+    void testeFronteiraMovimentosRestantesZero() {
         // Reduzir para 0
         engine.setMovimentosRestantes(0);
 
@@ -47,12 +50,14 @@ class GameEngineFronteiraTest {
     }
 
     @Test
-    void tempoRestante_ValorInicial_DeveSer60() {
+    @DisplayName("Teste de Fronteira: Valor inicial do tempo deve ser 60")
+    void testeFronteiraTempoRestanteValorInicial() {
         assertEquals(60, engine.getTempoRestante());
     }
 
     @Test
-    void tempoRestante_QuandoZerar_DeveEncerrarJogo() throws Exception {
+    @DisplayName("Teste de Fronteira: Quando tempo zerar, jogo deve ser encerrado")
+    void testeFronteiraTempoRestanteZerar() throws Exception {
         // Simula a contagem regressiva do timer
         Timer timer = getTimerFromEngine(engine);
         // Dispara 60 vezes o actionPerformed
@@ -67,7 +72,8 @@ class GameEngineFronteiraTest {
     }
 
     @Test
-    void pocaoVelocidade_DobraTempo_DeveRespeitarLimite() {
+    @DisplayName("Teste de Fronteira: Poção de velocidade dobra o tempo respeitando o limite")
+    void testeFronteiraPocaoVelocidadeDobraTempo() {
         // Arrange: tempo inicial 60
         Room entrada = engine.getSalas().get("entrada");
         Item pocao = new Item("Poção", Item.Type.POCAO_VELOCIDADE, "Dobra");
@@ -82,7 +88,8 @@ class GameEngineFronteiraTest {
     }
 
     @Test
-    void amuletoMovimentos_Adiciona3_DevePoderAcumularAcimaDe7() {
+    @DisplayName("Teste de Fronteira: Amuleto adiciona 3 movimentos e pode acumular acima de 7")
+    void testeFronteiraAmuletoMovimentosAcumulaAcimaDe7() {
         engine.setMovimentosRestantes(5);
         Room atual = engine.getJogador().getPosicaoAtual();
         Item amuleto = new Item("Amuleto", Item.Type.AMULETO_VISAO, "+3");
@@ -94,7 +101,8 @@ class GameEngineFronteiraTest {
     }
 
     @Test
-    void tentarMoverParaBorda_DeveFalhar() {
+    @DisplayName("Teste de Fronteira: Tentar mover para borda deve falhar para direções inválidas")
+    void testeFronteiraTentarMoverParaBorda() {
         // Usa a sala "entrada", que está na borda (0,0) e não é bloqueada
         Room borda = engine.getSalas().get("entrada");
         engine.getJogador().moverPara(borda);
